@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -100,7 +101,7 @@
                                                 </connections>
                                             </collectionView>
                                         </subviews>
-                                        <color key="backgroundColor" red="0.10315019609999999" green="0.030233416650000001" blue="0.14837658649999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" red="0.10588235294117647" green="0.098039215686274508" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <constraints>
                                             <constraint firstItem="v3G-NU-m7Y" firstAttribute="leading" secondItem="tjs-D3-OB5" secondAttribute="leading" constant="32" id="Cp3-Fq-Li8"/>
                                             <constraint firstAttribute="trailing" secondItem="67x-75-Ecv" secondAttribute="trailing" constant="32" id="DNM-pE-Iwm"/>
@@ -131,22 +132,60 @@
                                 <viewLayoutGuide key="contentLayoutGuide" id="qrc-WN-0Qj"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="bHR-Mt-9kj"/>
                             </scrollView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hk6-UB-UQb">
+                                <rect key="frame" x="8" y="114" width="374" height="730"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xhJ-FV-B3Q">
+                                        <rect key="frame" x="159.66666666666666" y="8" width="55" height="31"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="Open"/>
+                                        <connections>
+                                            <action selector="playerOpenCloseButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Y6x-Ad-JL8"/>
+                                        </connections>
+                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IVG-tF-Uw3" customClass="YTPlayerView">
+                                        <rect key="frame" x="32" y="79.000000000000014" width="310" height="174.33333333333337"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="IVG-tF-Uw3" secondAttribute="height" multiplier="16:9" id="cVI-yH-K8b"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.86274509803921573" green="0.31764705882352939" blue="0.53725490196078429" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="IVG-tF-Uw3" secondAttribute="trailing" constant="32" id="Dog-2I-uEZ"/>
+                                    <constraint firstItem="IVG-tF-Uw3" firstAttribute="centerX" secondItem="hk6-UB-UQb" secondAttribute="centerX" id="EJ6-KM-wD3"/>
+                                    <constraint firstItem="xhJ-FV-B3Q" firstAttribute="top" secondItem="hk6-UB-UQb" secondAttribute="top" constant="8" id="OwJ-5w-dbf"/>
+                                    <constraint firstAttribute="height" constant="730" id="b5Q-2S-slH"/>
+                                    <constraint firstItem="IVG-tF-Uw3" firstAttribute="top" secondItem="xhJ-FV-B3Q" secondAttribute="bottom" constant="40" id="dTG-cC-3GQ"/>
+                                    <constraint firstItem="xhJ-FV-B3Q" firstAttribute="centerX" secondItem="hk6-UB-UQb" secondAttribute="centerX" id="eU3-PY-84w"/>
+                                    <constraint firstItem="IVG-tF-Uw3" firstAttribute="leading" secondItem="hk6-UB-UQb" secondAttribute="leading" constant="32" id="yr5-Tm-05W"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" red="0.10315019612986043" green="0.030233416647892235" blue="0.14837658646130802" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" red="0.10588235294117647" green="0.098039215686274508" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="vPt-Gv-DCj" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="3pX-8C-ZPF"/>
+                            <constraint firstItem="hk6-UB-UQb" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="6HB-5a-YHh"/>
                             <constraint firstItem="vPt-Gv-DCj" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="F9w-DR-VPQ"/>
+                            <constraint firstAttribute="bottom" secondItem="hk6-UB-UQb" secondAttribute="bottom" id="fDi-xa-zfs"/>
                             <constraint firstItem="vPt-Gv-DCj" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="hLH-xb-T9i"/>
                             <constraint firstItem="vPt-Gv-DCj" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="sPA-Ad-5GQ"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hk6-UB-UQb" secondAttribute="trailing" constant="8" id="yDw-Zs-l03"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="backgroundView" destination="8bC-Xf-vdC" id="TEU-x2-KZl"/>
                         <outlet property="bottomPlaylistColletcionView" destination="v3G-NU-m7Y" id="hqz-No-1Bm"/>
                         <outlet property="bottomPlaylistNameLabel" destination="iX0-zw-2qh" id="SRO-W3-5Av"/>
                         <outlet property="galleryContainer" destination="67x-75-Ecv" id="Dpv-Kb-U77"/>
+                        <outlet property="playerOpenCloseButton" destination="xhJ-FV-B3Q" id="aFF-3f-VEK"/>
+                        <outlet property="playerView" destination="hk6-UB-UQb" id="y7d-HO-vGK"/>
+                        <outlet property="playerViewBottomConstraint" destination="fDi-xa-zfs" id="Nyt-3P-suS"/>
                         <outlet property="topPlaylistCollectionView" destination="gEa-Sf-QnG" id="HEh-pE-cMc"/>
                         <outlet property="topPlaylistNameLabel" destination="xIK-VZ-Bxp" id="NNh-GH-Qrs"/>
+                        <outlet property="youTubePlayerView" destination="IVG-tF-Uw3" id="MIB-Kj-4Wj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -164,4 +203,10 @@
             <point key="canvasLocation" x="800" y="-28"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Open" width="31" height="17"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
