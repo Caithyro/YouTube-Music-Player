@@ -10,39 +10,39 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PlaylistCollectionViewCell" id="gTV-IL-0wX" customClass="PlaylistCollectionViewCell" customModule="YouTube_Music_Player" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="171" height="147"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="TopCollectionViewCell" id="gTV-IL-0wX" customClass="TopCollectionViewCell" customModule="YouTube_Music_Player" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="171" height="142.33333333333334"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="171" height="147"/>
+                <rect key="frame" x="0.0" y="0.0" width="171" height="142.33333333333334"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cJ5-lV-uZ3">
-                        <rect key="frame" x="0.0" y="0.0" width="171" height="147"/>
+                        <rect key="frame" x="0.0" y="0.0" width="171" height="142.33333333333334"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="square.and.arrow.up.on.square" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Kdr-JS-jvh">
-                                <rect key="frame" x="8" y="5.9999999999999929" width="155" height="91.666666666666657"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Kdr-JS-jvh">
+                                <rect key="frame" x="8" y="8" width="155" height="87.333333333333329"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Kdr-JS-jvh" secondAttribute="height" multiplier="16:9" id="MpQ-DF-t66"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBI-ZT-ofa">
-                                <rect key="frame" x="8" y="103.33333333333333" width="37.333333333333336" height="18"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <nil key="textColor"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wBI-ZT-ofa">
+                                <rect key="frame" x="8" y="103.33333333333333" width="155" height="12"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4T5-aQ-seJ">
-                                <rect key="frame" x="8" y="129.33333333333334" width="31" height="14.333333333333343"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <nil key="textColor"/>
+                                <rect key="frame" x="8.0000000000000018" y="123.33333333333333" width="21.666666666666671" height="9.6666666666666714"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="8"/>
+                                <color key="textColor" systemColor="opaqueSeparatorColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemYellowColor"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="171" id="0lw-Gz-KTB"/>
-                            <constraint firstAttribute="height" constant="147" id="6Rp-ke-Tg3"/>
+                            <constraint firstAttribute="trailing" secondItem="wBI-ZT-ofa" secondAttribute="trailing" constant="8" id="48a-hL-ygg"/>
+                            <constraint firstAttribute="height" priority="999" constant="147" id="6Rp-ke-Tg3"/>
                             <constraint firstAttribute="trailing" secondItem="Kdr-JS-jvh" secondAttribute="trailing" constant="8" id="AYB-ag-vP1"/>
                             <constraint firstItem="wBI-ZT-ofa" firstAttribute="top" secondItem="Kdr-JS-jvh" secondAttribute="bottom" constant="8" id="JTl-hV-qXf"/>
                             <constraint firstItem="4T5-aQ-seJ" firstAttribute="top" secondItem="wBI-ZT-ofa" secondAttribute="bottom" constant="8" id="Jhg-xh-FHp"/>
@@ -61,14 +61,18 @@
                 <constraint firstItem="cJ5-lV-uZ3" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="lby-nC-dUE"/>
                 <constraint firstAttribute="trailing" secondItem="cJ5-lV-uZ3" secondAttribute="trailing" id="sXF-Bj-XPq"/>
             </constraints>
-            <size key="customSize" width="187" height="225"/>
-            <point key="canvasLocation" x="236.15384615384613" y="50.11848341232227"/>
+            <size key="customSize" width="187" height="220"/>
+            <connections>
+                <outlet property="songNameLabel" destination="wBI-ZT-ofa" id="1c9-D1-MQf"/>
+                <outlet property="thumbnailImageView" destination="Kdr-JS-jvh" id="kxG-gR-out"/>
+                <outlet property="viewCountLabel" destination="4T5-aQ-seJ" id="TdC-er-5FP"/>
+            </connections>
+            <point key="canvasLocation" x="236.15384615384613" y="47.985781990521325"/>
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="square.and.arrow.up.on.square" catalog="system" width="119" height="128"/>
-        <systemColor name="systemYellowColor">
-            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

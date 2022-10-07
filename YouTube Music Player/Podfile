@@ -4,5 +4,6 @@ target 'YouTube Music Player' do
 
   pod "youtube-ios-player-helper"
   pod 'Alamofire'
+  pod 'SDWebImage/MapKit'
 
 end
