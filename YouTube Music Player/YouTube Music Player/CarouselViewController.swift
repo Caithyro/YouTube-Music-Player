@@ -8,37 +8,74 @@
 import UIKit
 
 class CarouselViewController: UIPageViewController {
-    
+        
     private var itemsToPresent: [UIViewController] = []
     private var currentPageIndex = 0
-
+    private var channelsInfoDataArray: [StatisticsForChannelItems] = []
+    private var uploadsIdsArray: [String] = []
+    
+    private let networkService = NetworkService.shared
+    private let serialQueue = DispatchQueue.global()
+    private let firstChannelId = "UCfM3zsQsOnfWNUppiycmBuw"
+    private let secondChannelId = "UC0KAFLxIiaR_FFNYDL3utGw"
+    private let thirdChannelId = "UCLQPinZNWKlLBF7C_m2YP3g"
+    private let fourthChannelId = "UCAfvFXvjzEupwo2NtyDhRZA"
+    private let activityIndicatorView = UIActivityIndicatorView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 326, height: 183)))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         dataSource = self
-        
-        populateItems()
-        if let firstViewController = itemsToPresent.first {
-            setViewControllers([firstViewController], direction: .forward, animated: true)
+        setupUi()
+        loadData { viewControllers in
+            if let firstViewController = viewControllers.first {
+                setViewControllers([firstViewController], direction: .forward, animated: true)
+            }
+            setupTimer()
         }
-        setupTimer()
+    }
+    
+    //MARK: - Private
+    
+    private func setupUi() {
+        
+        addTapGestureRecogniser()
+        addActivityIndicatorView()
+        self.navigationController?.navigationBar.isHidden = true
+    }
+    
+    private func addTapGestureRecogniser() {
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.showPlayerViewController(_:)))
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    private func addActivityIndicatorView() {
+        
+        self.view.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
     }
     
     private func populateItems() {
         
-        let text = ["some", "body", "once", "told"]
-        let backgroundColor: [UIColor] = [.green, .yellow, .cyan, .brown]
-        
-        for (index, t) in text.enumerated() {
-            let newItem = createCarouselItemController(with: t, with: backgroundColor[index])
+        var indexForAppend = 0
+        for _ in channelsInfoDataArray {
+            let newItem = createCarouselItemController(with: channelsInfoDataArray[indexForAppend].snippet?.title, with: channelsInfoDataArray[indexForAppend].snippet?.thumbnails?.statisticsForChannelHigh?.url, with: channelsInfoDataArray[indexForAppend].statistics!.subscriberCount ?? "")
             itemsToPresent.append(newItem)
+            indexForAppend += 1
         }
+        indexForAppend = 0
+        for _ in channelsInfoDataArray {
+            uploadsIdsArray.append(channelsInfoDataArray[indexForAppend].contentDetails?.relatedPlaylists?.uploads ?? "")
+            indexForAppend += 1
+        }
+        indexForAppend = 0
     }
     
-    private func createCarouselItemController(with titleText: String?, with color: UIColor?) -> UIViewController {
+    private func createCarouselItemController(with channelNameText: String?, with backgroundImageViewURLString: String?, with subscribersCountText: String) -> UIViewController {
         
         let viewController = UIViewController()
-        viewController.view = CarouselItem(titleText: titleText, background: color)
-        
+        viewController.view = CarouselItem(backgroundImageViewURLString: backgroundImageViewURLString, channelNameText: channelNameText, subscribersCountText: subscribersCountText)
         return viewController
     }
     
@@ -53,6 +90,8 @@ class CarouselViewController: UIPageViewController {
         
         guard index < itemsToPresent.count else { return UIViewController() }
         currentPageIndex = index
+        activityIndicatorView.stopAnimating()
+        activityIndicatorView.removeFromSuperview()
         return itemsToPresent[index]
     }
     
@@ -65,15 +104,58 @@ class CarouselViewController: UIPageViewController {
         setViewControllers([viewController], direction: .forward, animated: true)
     }
     
+    @objc private func showPlayerViewController(_ sender: UITapGestureRecognizer) {
+        
+        
+        let main = UIStoryboard(name: "Main", bundle: nil)
+        if let playerViewController = main.instantiateViewController(withIdentifier:
+                                                                        "PlayerViewController")
+            as? PlayerViewController {
+            playerViewController.galleryOrCarousel = 1
+            playerViewController.playlistId = self.uploadsIdsArray[currentPageIndex]
+            navigationController?.present(playerViewController, animated: true)
+        }
+    }
+    
     private func setupTimer() {
         
         _ = Timer.scheduledTimer(timeInterval: 5,
-                                         target: self,
-                                         selector: #selector(changePage),
-                                         userInfo: nil,
-                                         repeats: true)
+                                 target: self,
+                                 selector: #selector(changePage),
+                                 userInfo: nil,
+                                 repeats: true)
     }
-
+    
+    private func loadData(completion: (([UIViewController]) -> ())) {
+        
+        serialQueue.async {
+            self.networkService.fetchDataForCarousel(channelId: self.firstChannelId) { items in
+                self.channelsInfoDataArray = items
+                self.populateItems()
+            }
+        }
+        serialQueue.async {
+            self.networkService.fetchDataForCarousel(channelId: self.secondChannelId) { items in
+                self.channelsInfoDataArray = items
+                self.populateItems()
+            }
+        }
+        serialQueue.async {
+            self.networkService.fetchDataForCarousel(channelId: self.thirdChannelId) { items in
+                self.channelsInfoDataArray = items
+                self.populateItems()
+            }
+        }
+        serialQueue.async {
+            self.networkService.fetchDataForCarousel(channelId: self.fourthChannelId) { items in
+                self.channelsInfoDataArray = items
+                self.populateItems()
+            }
+        }
+        serialQueue.sync {
+            completion(itemsToPresent)
+        }
+    }
 }
 
 extension CarouselViewController: UIPageViewControllerDataSource {

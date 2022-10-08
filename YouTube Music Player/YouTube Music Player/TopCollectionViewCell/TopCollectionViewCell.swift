@@ -19,7 +19,6 @@ class TopCollectionViewCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
     
     func configureTopGalleryCell(index: Int, videoId: String, dataToDisplay: PlaylistItems) {

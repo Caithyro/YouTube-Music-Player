@@ -12,6 +12,9 @@ class NetworkService {
     
     static let shared = NetworkService()
     
+    private var uploadsResponceDataArray: [PlaylistItems] = []
+    private var statisticsForChannelResponceDataArray: [StatisticsForChannelItems] = []
+    private var carouselPlaylistResponceDataArray: [PlaylistItems] = []
     private var topPlaylistResponceDataArray: [PlaylistItems] = []
     private var topStatisticsResponceDataArray: [StatisticsItems] = []
     private var topPlaylistSnippetResponceDataArray: [PlaylistSnippetItems] = []
@@ -19,7 +22,30 @@ class NetworkService {
     private var bottomStatisticsResponceDataArray: [StatisticsItems] = []
     private var bottomPlaylistSnippetResponceDataArray: [PlaylistSnippetItems] = []
     
-    func fetchDataForTopGallery(playlistId: String, completion: @escaping(([PlaylistItems]) -> ())) {
+    func fetchDataForCarousel(channelId: String, completion: @escaping(([StatisticsForChannelItems]) -> ())) {
+        
+        let requestURLString = "https://youtube.googleapis.com/youtube/v3/channels?part=contentDetails&part=statistics&part=snippet&id=\(channelId)&key=AIzaSyC4i7YntmeRWeUesx5NA8__0t4FgIwN5ko"
+        
+        AF.request(requestURLString).response { [self] statisticsResponceData in
+            
+            do {
+                
+                self.statisticsForChannelResponceDataArray.removeAll()
+                var indexForAppend = 0
+                let jsonDecoder = JSONDecoder()
+                let responceModel = try jsonDecoder.decode(StatisticsForChannelResponce.self, from: statisticsResponceData.data!)
+                for _ in responceModel.items! {
+                    self.statisticsForChannelResponceDataArray.append(responceModel.items![indexForAppend])
+                    indexForAppend += 1
+                }
+                completion(statisticsForChannelResponceDataArray)
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    func fetchPlaylistForTopGallery(playlistId: String, completion: @escaping(([PlaylistItems]) -> ())) {
         
         let requestFirstPageURLString = "https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=\(playlistId)&key=AIzaSyC4i7YntmeRWeUesx5NA8__0t4FgIwN5ko"
         
@@ -34,39 +60,16 @@ class NetworkService {
                 for _ in responceModel.playlistItems! {
                     self.topPlaylistResponceDataArray.append(responceModel.playlistItems![indexForAppend])
                     indexForAppend += 1
-                    completion(topPlaylistResponceDataArray)
                 }
-                indexForAppend = 0
-            } catch {
-                print(error)
-            }
-        }
-    }
-    
-    func fetchSecondPageOfData(playlistId: String, nextPageToken: String, completion: @escaping(([PlaylistItems]) -> ())) {
-        
-        let requestSecondPageURLString = "https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&pageToken=\(nextPageToken)&playlistId=\(playlistId)&key=AIzaSyC4i7YntmeRWeUesx5NA8__0t4FgIwN5ko"
-        
-        AF.request(requestSecondPageURLString).response { [self] playlistResponceData1 in
-            
-            do {
-                
-                var indexForAppend = 0
-                let jsonDecoder = JSONDecoder()
-                let secondPageResponceModel = try jsonDecoder.decode(PlaylistResponce.self, from: playlistResponceData1.data!)
-                for _ in secondPageResponceModel.playlistItems! {
-                    self.topPlaylistResponceDataArray.append(secondPageResponceModel.playlistItems![indexForAppend])
-                    indexForAppend += 1
-                }
-                indexForAppend = 0
                 completion(topPlaylistResponceDataArray)
+                indexForAppend = 0
             } catch {
                 print(error)
             }
         }
     }
     
-    func fetchDataForBottomGallery(playlistId: String, completion: @escaping(([PlaylistItems]) -> ())) {
+    func fetchPlaylistForBottomGallery(playlistId: String, completion: @escaping(([PlaylistItems]) -> ())) {
         
         let requestFirstPageURLString = "https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=\(playlistId)&key=AIzaSyC4i7YntmeRWeUesx5NA8__0t4FgIwN5ko"
         
