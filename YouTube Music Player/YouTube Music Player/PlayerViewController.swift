@@ -25,6 +25,7 @@ class PlayerViewController: UIViewController {
     
     var videoIdToLoad: String = ""
     var indexPathRow: Int = 0
+    var playlistIndex: Int = 0
     var topOrBottom: Int = 0
     var galleryOrCarousel: Int = 0
     var playlistId: String = ""
@@ -38,7 +39,6 @@ class PlayerViewController: UIViewController {
     private var musicPlaying: Bool = false
     private var videoDuration: Double = 0.0
     private var currentTimeOfPlayback: Float = 0.0
-    private var playlistIndex: Int = 0
     private var networkService = NetworkService.shared
     
     override func viewDidLoad() {
@@ -61,6 +61,7 @@ class PlayerViewController: UIViewController {
                         allowSeekAhead: true)
         getCurrentTime()
         playButton.setImage(UIImage(named: "Pause"), for: .normal)
+        playerView.playVideo()
         musicPlaying = true
     }
     
@@ -69,15 +70,16 @@ class PlayerViewController: UIViewController {
         self.durationLabel.text = "0:00"
         switch galleryOrCarousel {
         case 0:
-            changePlaylistIndex()
             playButtonPressed(self)
             if topOrBottom == 0 {
+                changePlaylistIndexNegative(playlistArray: topPlaylistArray)
                 serialQueue.sync {
                     self.playerView.load(withVideoId: self.topPlaylistArray[playlistIndex].snippet?.resourceId?.videoId ?? "0",
                                          playerVars: ["controls" : 0])
                 }
                 self.nameLabel.text = self.topPlaylistArray[playlistIndex].snippet?.title
             } else {
+                changePlaylistIndexNegative(playlistArray: bottomPlaylistArray)
                 serialQueue.sync {
                     self.playerView.load(withVideoId: self.bottomPlaylistArray[playlistIndex].snippet?.resourceId?.videoId ?? "0",
                                          playerVars: ["controls" : 0])
@@ -85,13 +87,15 @@ class PlayerViewController: UIViewController {
                 self.nameLabel.text = self.bottomPlaylistArray[playlistIndex].snippet?.title
             }
         case 1:
-            changePlaylistIndex()
+            changePlaylistIndexNegative(playlistArray: carouselPlaylistArray)
             self.nameLabel.text = carouselPlaylistArray[playlistIndex].snippet?.title
             DispatchQueue.global().sync {
                 self.networkService.fetchViewsCountForCarousel(videoID: carouselPlaylistArray[playlistIndex].snippet?.resourceId?.videoId ?? "") { statisticsItems in
                     self.viewsCountLabel.text = "\(statisticsItems.first?.statistics?.viewCount ?? "") views"
                 }
             }
+            self.musicPlaying = true
+            self.playButton.setImage(UIImage(named: "Pause"), for: .normal)
             self.timelineSlider.value = 0
             self.currentTimeLabel.text = "0:00"
             self.playerView.previousVideo()
@@ -121,19 +125,16 @@ class PlayerViewController: UIViewController {
         self.durationLabel.text = "0:00"
         switch galleryOrCarousel {
         case 0:
-            if playlistIndex == (topPlaylistArray.count - 1) {
-                playlistIndex = (topPlaylistArray.count - 1)
-            } else {
-                playlistIndex = indexPathRow + 1
-            }
             playButtonPressed(self)
             if topOrBottom == 0 {
+                changePlaylistIndexPositive(playlistArray: topPlaylistArray)
                 serialQueue.sync {
                     self.playerView.load(withVideoId: self.topPlaylistArray[playlistIndex].snippet?.resourceId?.videoId ?? "0",
                                          playerVars: ["controls" : 0])
                 }
                 self.nameLabel.text = self.topPlaylistArray[playlistIndex].snippet?.title
             } else {
+                changePlaylistIndexPositive(playlistArray: bottomPlaylistArray)
                 serialQueue.sync {
                     self.playerView.load(withVideoId: self.bottomPlaylistArray[playlistIndex].snippet?.resourceId?.videoId ?? "0",
                                          playerVars: ["controls" : 0])
@@ -141,21 +142,18 @@ class PlayerViewController: UIViewController {
                 self.nameLabel.text = self.bottomPlaylistArray[playlistIndex].snippet?.title
             }
         case 1:
-            if playlistIndex == (carouselPlaylistArray.count - 1) {
-                playlistIndex = (carouselPlaylistArray.count - 1)
-            } else {
-                playlistIndex = playlistIndex + 1
-            }
+            changePlaylistIndexPositive(playlistArray: carouselPlaylistArray)
             self.nameLabel.text = carouselPlaylistArray[playlistIndex].snippet?.title
             DispatchQueue.global().sync {
                 self.networkService.fetchViewsCountForCarousel(videoID: carouselPlaylistArray[self.playlistIndex].snippet?.resourceId?.videoId ?? "") { statisticsItems in
                     self.viewsCountLabel.text = "\(statisticsItems.first?.statistics?.viewCount ?? "") views"
                 }
             }
+            self.musicPlaying = true
+            self.playButton.setImage(UIImage(named: "Pause"), for: .normal)
             self.timelineSlider.value = 0
             self.currentTimeLabel.text = "0:00"
             self.playerView.nextVideo()
-            self.playButtonPressed(self)
             getDurarion()
         default:
             print("error")
@@ -165,12 +163,21 @@ class PlayerViewController: UIViewController {
     
     //MARK: - Private
     
-    private func changePlaylistIndex() {
+    private func changePlaylistIndexPositive(playlistArray: [PlaylistItems]) {
         
-        if playlistIndex == (topPlaylistArray.count - 1) {
-            playlistIndex = (topPlaylistArray.count - 1)
+        if playlistIndex == (playlistArray.count - 1) {
+            playlistIndex = (playlistArray.count - 1)
         } else {
-            playlistIndex = indexPathRow + 1
+            playlistIndex = playlistIndex + 1
+        }
+    }
+    
+    private func changePlaylistIndexNegative(playlistArray: [PlaylistItems]) {
+        
+        if playlistIndex == 0 {
+            playlistIndex = 0
+        } else {
+            playlistIndex = playlistIndex - 1
         }
     }
     
@@ -307,6 +314,7 @@ extension PlayerViewController: YTPlayerViewDelegate {
         getDurarion()
         self.timelineSlider.maximumValue = Float(self.videoDuration)
         self.timelineSlider.value = currentTimeOfPlayback
+        playButtonPressed(self)
     }
     
     func playerView(_ playerView: YTPlayerView, didPlayTime playTime: Float) {

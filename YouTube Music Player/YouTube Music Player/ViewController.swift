@@ -133,6 +133,7 @@ extension ViewController: UICollectionViewDelegate {
                                                                         "PlayerViewController")
             as? PlayerViewController {
             playerViewController.indexPathRow = indexPath.row
+            playerViewController.playlistIndex = indexPath.row
             if collectionView == topPlaylistCollectionView {
                 playerViewController.topPlaylistArray = self.topPlaylistArray
                 playerViewController.videoIdToLoad = self.topPlaylistArray[indexPath.row].snippet?.resourceId?.videoId ?? ""
