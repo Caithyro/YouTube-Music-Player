@@ -20,15 +20,13 @@ class ViewController: UIViewController {
     
     private let networkService = NetworkService.shared
     
-    private var playerIsActive: Bool = false
-    private var musicPlaying: Bool = false
-    private var carouselPlaylistArray: [PlaylistItems] = []
     private var topPlaylistArray: [PlaylistItems] = []
     private var bottomPlaylistArray: [PlaylistItems] = []
     private var topPlaylistId = "PLN1mxegxWPd3d8jItTyrAxwm-iq-KrM-e"
     private var bottomPlaylistId = "OLAK5uy_m-wsk081gTHvqdTfPC7gKdKiTlqlxg9KM"
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         self.topPlaylistCollectionView.register(UINib(nibName: "TopCollectionViewCell", bundle: nil),
                                                 forCellWithReuseIdentifier: "TopCollectionViewCell")
@@ -53,8 +51,10 @@ class ViewController: UIViewController {
     
     private func setupUI() {
         
-        topPlaylistCollectionView.layer.backgroundColor = CGColor(red: 0, green: 0, blue: 0, alpha: 0)
-        bottomPlaylistColletcionView.layer.backgroundColor = CGColor(red: 0, green: 0, blue: 0, alpha: 0)
+        topPlaylistCollectionView.layer.backgroundColor = CGColor(red: 0, green: 0,
+                                                                  blue: 0, alpha: 0)
+        bottomPlaylistColletcionView.layer.backgroundColor = CGColor(red: 0, green: 0,
+                                                                     blue: 0, alpha: 0)
         self.playerView.layer.cornerRadius = 10
         self.navigationController?.navigationBar.isHidden = true
     }
@@ -63,20 +63,24 @@ class ViewController: UIViewController {
         
         DispatchQueue.global(qos: .background).async {
             DispatchQueue.global(qos: .background).sync {
-                self.networkService.fetchPlaylistForTopGallery(playlistId: self.topPlaylistId) { items in
+                self.networkService.fetchPlaylistForTopGallery(playlistId:
+                                                                self.topPlaylistId) { items in
                     self.topPlaylistArray = items
                     self.topPlaylistCollectionView.reloadData()
                 }
-                self.networkService.fetchPlaylistNameForTopGallery(playlistID: self.topPlaylistId) { items in
+                self.networkService.fetchPlaylistNameForTopGallery(playlistID:
+                                                                    self.topPlaylistId) { items in
                     self.topPlaylistNameLabel.text = items.first?.snippet?.title ?? "none"
                 }
             }
             DispatchQueue.global(qos: .background).sync {
-                self.networkService.fetchPlaylistForBottomGallery(playlistId: self.bottomPlaylistId) { items in
+                self.networkService.fetchPlaylistForBottomGallery(playlistId:
+                                                                    self.bottomPlaylistId) { items in
                     self.bottomPlaylistArray = items
                     self.bottomPlaylistColletcionView.reloadData()
                 }
-                self.networkService.fetchPlaylistNameForBottomGallery(playlistID: self.bottomPlaylistId) { items in
+                self.networkService.fetchPlaylistNameForBottomGallery(playlistID:
+                                                                        self.bottomPlaylistId) { items in
                     self.bottomPlaylistNameLabel.text = items.first?.snippet?.title ?? "none"
                 }
             }
@@ -102,14 +106,18 @@ extension ViewController: UICollectionViewDataSource {
             guard let customCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "TopCollectionViewCell",
                                                                                     for: indexPath) as? TopCollectionViewCell else { return UICollectionViewCell() }
             
-            customCollectionViewCell.configureTopGalleryCell(index: indexPath.row, videoId: topPlaylistArray[indexPath.row].snippet?.resourceId?.videoId ?? "0", dataToDisplay: topPlaylistArray[indexPath.row])
+            customCollectionViewCell.configureTopGalleryCell(index: indexPath.row,
+                                                             videoId: topPlaylistArray[indexPath.row].snippet?.resourceId?.videoId ?? "0",
+                                                             dataToDisplay: topPlaylistArray[indexPath.row])
             
             return customCollectionViewCell
         } else {
             guard let customCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "BottomCollectionViewCell",
                                                                                     for: indexPath) as? BottomCollectionViewCell else { return UICollectionViewCell() }
             
-            customCollectionViewCell.configureBottomGalleryCell(index: indexPath.row, videoId: bottomPlaylistArray[indexPath.row].snippet?.resourceId?.videoId ?? "0", dataToDisplay: bottomPlaylistArray[indexPath.row])
+            customCollectionViewCell.configureBottomGalleryCell(index: indexPath.row,
+                                                                videoId: bottomPlaylistArray[indexPath.row].snippet?.resourceId?.videoId ?? "0",
+                                                                dataToDisplay: bottomPlaylistArray[indexPath.row])
             
             return customCollectionViewCell
         }
@@ -126,11 +134,12 @@ extension ViewController: UICollectionViewDelegate {
             as? PlayerViewController {
             playerViewController.indexPathRow = indexPath.row
             if collectionView == topPlaylistCollectionView {
-                playerViewController.topOrBottom = 0
                 playerViewController.topPlaylistArray = self.topPlaylistArray
+                playerViewController.videoIdToLoad = self.topPlaylistArray[indexPath.row].snippet?.resourceId?.videoId ?? ""
             } else {
                 playerViewController.topOrBottom = 1
                 playerViewController.bottomPlaylistArray = self.bottomPlaylistArray
+                playerViewController.videoIdToLoad = self.bottomPlaylistArray[indexPath.row].snippet?.resourceId?.videoId ?? ""
             }
             navigationController?.present(playerViewController, animated: true)
         }

@@ -8,7 +8,7 @@
 import UIKit
 
 class CarouselViewController: UIPageViewController {
-        
+    
     private var itemsToPresent: [UIViewController] = []
     private var currentPageIndex = 0
     private var channelsInfoDataArray: [StatisticsForChannelItems] = []
@@ -20,11 +20,14 @@ class CarouselViewController: UIPageViewController {
     private let secondChannelId = "UC0KAFLxIiaR_FFNYDL3utGw"
     private let thirdChannelId = "UCLQPinZNWKlLBF7C_m2YP3g"
     private let fourthChannelId = "UCAfvFXvjzEupwo2NtyDhRZA"
-    private let activityIndicatorView = UIActivityIndicatorView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 326, height: 183)))
+    private let activityIndicatorView = UIActivityIndicatorView(frame: CGRect(origin: CGPoint.zero,
+                                                                              size: CGSize(width: 326, height: 183)))
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         dataSource = self
+        self.isPagingEnabled = false
         setupUi()
         loadData { viewControllers in
             if let firstViewController = viewControllers.first {
@@ -40,12 +43,14 @@ class CarouselViewController: UIPageViewController {
         
         addTapGestureRecogniser()
         addActivityIndicatorView()
+        decoratePageControl()
         self.navigationController?.navigationBar.isHidden = true
     }
     
     private func addTapGestureRecogniser() {
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.showPlayerViewController(_:)))
+        let tap = UITapGestureRecognizer(target: self,
+                                         action: #selector(self.showPlayerViewController(_:)))
         self.view.isUserInteractionEnabled = true
         self.view.addGestureRecognizer(tap)
     }
@@ -60,7 +65,9 @@ class CarouselViewController: UIPageViewController {
         
         var indexForAppend = 0
         for _ in channelsInfoDataArray {
-            let newItem = createCarouselItemController(with: channelsInfoDataArray[indexForAppend].snippet?.title, with: channelsInfoDataArray[indexForAppend].snippet?.thumbnails?.statisticsForChannelHigh?.url, with: channelsInfoDataArray[indexForAppend].statistics!.subscriberCount ?? "")
+            let newItem = createCarouselItemController(with: channelsInfoDataArray[indexForAppend].snippet?.title,
+                                                       with: channelsInfoDataArray[indexForAppend].snippet?.thumbnails?.statisticsForChannelHigh?.url,
+                                                       with: channelsInfoDataArray[indexForAppend].statistics!.subscriberCount ?? "")
             itemsToPresent.append(newItem)
             indexForAppend += 1
         }
@@ -72,10 +79,14 @@ class CarouselViewController: UIPageViewController {
         indexForAppend = 0
     }
     
-    private func createCarouselItemController(with channelNameText: String?, with backgroundImageViewURLString: String?, with subscribersCountText: String) -> UIViewController {
+    private func createCarouselItemController(with channelNameText: String?,
+                                              with backgroundImageViewURLString: String?,
+                                              with subscribersCountText: String) -> UIViewController {
         
         let viewController = UIViewController()
-        viewController.view = CarouselItem(backgroundImageViewURLString: backgroundImageViewURLString, channelNameText: channelNameText, subscribersCountText: subscribersCountText)
+        viewController.view = CarouselItem(backgroundImageViewURLString: backgroundImageViewURLString,
+                                           channelNameText: channelNameText,
+                                           subscribersCountText: subscribersCountText)
         return viewController
     }
     
@@ -84,6 +95,7 @@ class CarouselViewController: UIPageViewController {
         let pageControl = UIPageControl.appearance(whenContainedInInstancesOf: [CarouselViewController.self])
         pageControl.currentPageIndicatorTintColor = .white
         pageControl.pageIndicatorTintColor = .gray
+        pageControl.isUserInteractionEnabled = false
     }
     
     private func viewControllerAtIndex(_ index: Int) -> UIViewController {
@@ -113,6 +125,7 @@ class CarouselViewController: UIPageViewController {
             as? PlayerViewController {
             playerViewController.galleryOrCarousel = 1
             playerViewController.playlistId = self.uploadsIdsArray[currentPageIndex]
+            playerViewController.currentPage = self.currentPageIndex
             navigationController?.present(playerViewController, animated: true)
         }
     }
@@ -160,7 +173,8 @@ class CarouselViewController: UIPageViewController {
 
 extension CarouselViewController: UIPageViewControllerDataSource {
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerBefore viewController: UIViewController) -> UIViewController? {
         
         guard let viewControllerIndex = itemsToPresent.firstIndex(of: viewController) else {
             return nil
@@ -179,7 +193,8 @@ extension CarouselViewController: UIPageViewControllerDataSource {
         return itemsToPresent[previousIndex]
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
         
         guard let viewControllerIndex = itemsToPresent.firstIndex(of: viewController) else {
             return nil
@@ -210,4 +225,26 @@ extension CarouselViewController: UIPageViewControllerDataSource {
         return firstViewControllerIndex
     }
     
+}
+
+extension UIPageViewController {
+    
+    var isPagingEnabled: Bool {
+        get {
+            var isEnabled: Bool = true
+            for view in view.subviews {
+                if let subView = view as? UIScrollView {
+                    isEnabled = subView.isScrollEnabled
+                }
+            }
+            return isEnabled
+        }
+        set {
+            for view in view.subviews {
+                if let subView = view as? UIScrollView {
+                    subView.isScrollEnabled = newValue
+                }
+            }
+        }
+    }
 }

@@ -15,8 +15,9 @@ class BottomCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var viewCountLabel: UILabel!
     
     private let networkService = NetworkService.shared
-    private let transformer = SDImageResizingTransformer(size: CGSize(width: 155, height: 87.33), scaleMode: .fill)
-
+    private let transformer = SDImageResizingTransformer(size: CGSize(width: 155, height: 87.33),
+                                                         scaleMode: .fill)
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -28,7 +29,8 @@ class BottomCollectionViewCell: UICollectionViewCell {
         }
         self.songNameLabel.text = dataToDisplay.snippet?.title
         self.thumbnailImageView.layer.cornerRadius = 10
-        self.thumbnailImageView.sd_setImage(with: URL(string: dataToDisplay.snippet?.thumbnails?.maxres?.url ?? "none"), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
+        self.thumbnailImageView.sd_setImage(with: URL(string: dataToDisplay.snippet?.thumbnails?.maxres?.url ?? "none"),
+                                            placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
     }
-
+    
 }

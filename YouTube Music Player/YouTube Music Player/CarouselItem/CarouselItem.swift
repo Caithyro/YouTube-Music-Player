@@ -30,12 +30,14 @@ class CarouselItem: UIView {
         initWithNib()
     }
     
-    convenience init(backgroundImageViewURLString: String? = "", channelNameText: String? = "Unknown", subscribersCountText: String) {
+    convenience init(backgroundImageViewURLString: String? = "",
+                     channelNameText: String? = "Unknown", subscribersCountText: String) {
         self.init()
         let transformer = SDImageResizingTransformer(size: CGSize(width: 390, height: 183), scaleMode: .fill)
         channelNameLabel.text = channelNameText
         subscribersCountLabel.text = "\(String(describing: subscribersCountText)) subscribers"
-        self.backgroundImageView.sd_setImage(with: URL(string: backgroundImageViewURLString ?? ""), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
+        self.backgroundImageView.sd_setImage(with: URL(string: backgroundImageViewURLString ?? ""),
+                                             placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.backgroundImageView.layer.cornerRadius = 10
         setGradientBackground(view: self.playButtonView)
     }
@@ -43,7 +45,8 @@ class CarouselItem: UIView {
     //MARK: - Private
     
     private func initWithNib() {
-        Bundle.main.loadNibNamed(CarouselItem.CAROUSEL_ITEM_NIB, owner: self, options: nil)
+        Bundle.main.loadNibNamed(CarouselItem.CAROUSEL_ITEM_NIB,
+                                 owner: self, options: nil)
         contentView.frame = bounds
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         addSubview(contentView)
@@ -51,8 +54,10 @@ class CarouselItem: UIView {
     
     private func setGradientBackground(view: UIView) {
         
-        let colorTop =  UIColor(red: 220.0/255.0, green: 81.0/255.0, blue: 137.0/255.0, alpha: 1.0).cgColor
-        let colorBottom = UIColor(red: 88.0/255.0, green: 35.0/255.0, blue: 194.0/255.0, alpha: 1.0).cgColor
+        let colorTop =  UIColor(red: 220.0/255.0, green: 81.0/255.0,
+                                blue: 137.0/255.0, alpha: 1.0).cgColor
+        let colorBottom = UIColor(red: 88.0/255.0, green: 35.0/255.0,
+                                  blue: 194.0/255.0, alpha: 1.0).cgColor
         
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [colorTop, colorBottom]

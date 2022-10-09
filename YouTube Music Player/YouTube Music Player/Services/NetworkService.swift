@@ -12,9 +12,9 @@ class NetworkService {
     
     static let shared = NetworkService()
     
-    private var uploadsResponceDataArray: [PlaylistItems] = []
     private var statisticsForChannelResponceDataArray: [StatisticsForChannelItems] = []
     private var carouselPlaylistResponceDataArray: [PlaylistItems] = []
+    private var carouselStatisticsResponceDataArray: [StatisticsItems] = []
     private var topPlaylistResponceDataArray: [PlaylistItems] = []
     private var topStatisticsResponceDataArray: [StatisticsItems] = []
     private var topPlaylistSnippetResponceDataArray: [PlaylistSnippetItems] = []
@@ -22,9 +22,12 @@ class NetworkService {
     private var bottomStatisticsResponceDataArray: [StatisticsItems] = []
     private var bottomPlaylistSnippetResponceDataArray: [PlaylistSnippetItems] = []
     
+    private let urlStringFirstPart = "https://youtube.googleapis.com/youtube/v3/"
+    private let apiKey = "AIzaSyC4i7YntmeRWeUesx5NA8__0t4FgIwN5ko"
+    
     func fetchDataForCarousel(channelId: String, completion: @escaping(([StatisticsForChannelItems]) -> ())) {
         
-        let requestURLString = "https://youtube.googleapis.com/youtube/v3/channels?part=contentDetails&part=statistics&part=snippet&id=\(channelId)&key=AIzaSyC4i7YntmeRWeUesx5NA8__0t4FgIwN5ko"
+        let requestURLString = "\(urlStringFirstPart)channels?part=contentDetails&part=statistics&part=snippet&id=\(channelId)&key=\(apiKey)"
         
         AF.request(requestURLString).response { [self] statisticsResponceData in
             
@@ -33,7 +36,8 @@ class NetworkService {
                 self.statisticsForChannelResponceDataArray.removeAll()
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
-                let responceModel = try jsonDecoder.decode(StatisticsForChannelResponce.self, from: statisticsResponceData.data!)
+                let responceModel = try jsonDecoder.decode(StatisticsForChannelResponce.self,
+                                                           from: statisticsResponceData.data!)
                 for _ in responceModel.items! {
                     self.statisticsForChannelResponceDataArray.append(responceModel.items![indexForAppend])
                     indexForAppend += 1
@@ -47,7 +51,7 @@ class NetworkService {
     
     func fetchPlaylistForTopGallery(playlistId: String, completion: @escaping(([PlaylistItems]) -> ())) {
         
-        let requestFirstPageURLString = "https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=\(playlistId)&key=AIzaSyC4i7YntmeRWeUesx5NA8__0t4FgIwN5ko"
+        let requestFirstPageURLString = "\(urlStringFirstPart)playlistItems?part=snippet&maxResults=10&playlistId=\(playlistId)&key=\(apiKey)"
         
         AF.request(requestFirstPageURLString).response { [self] playlistResponceData in
             
@@ -56,7 +60,8 @@ class NetworkService {
                 self.topPlaylistResponceDataArray.removeAll()
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
-                let responceModel = try jsonDecoder.decode(PlaylistResponce.self, from: playlistResponceData.data!)
+                let responceModel = try jsonDecoder.decode(PlaylistResponce.self,
+                                                           from: playlistResponceData.data!)
                 for _ in responceModel.playlistItems! {
                     self.topPlaylistResponceDataArray.append(responceModel.playlistItems![indexForAppend])
                     indexForAppend += 1
@@ -71,7 +76,7 @@ class NetworkService {
     
     func fetchPlaylistForBottomGallery(playlistId: String, completion: @escaping(([PlaylistItems]) -> ())) {
         
-        let requestFirstPageURLString = "https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=\(playlistId)&key=AIzaSyC4i7YntmeRWeUesx5NA8__0t4FgIwN5ko"
+        let requestFirstPageURLString = "\(urlStringFirstPart)playlistItems?part=snippet&playlistId=\(playlistId)&key=\(apiKey)"
         
         AF.request(requestFirstPageURLString).response { [self] playlistResponceData in
             
@@ -80,20 +85,22 @@ class NetworkService {
                 self.topPlaylistResponceDataArray.removeAll()
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
-                let responceModel = try jsonDecoder.decode(PlaylistResponce.self, from: playlistResponceData.data!)
+                let responceModel = try jsonDecoder.decode(PlaylistResponce.self,
+                                                           from: playlistResponceData.data!)
                 for _ in responceModel.playlistItems! {
                     self.bottomPlaylistResponceDataArray.append(responceModel.playlistItems![indexForAppend])
                     indexForAppend += 1
                 }
                 
-                let requestSecondPageURLString = "https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&pageToken=\( responceModel.nextPageToken!)&playlistId=\(playlistId)&key=AIzaSyC4i7YntmeRWeUesx5NA8__0t4FgIwN5ko"
+                let requestSecondPageURLString = "\(urlStringFirstPart)playlistItems?part=snippet&pageToken=\(responceModel.nextPageToken!)&playlistId=\(playlistId)&key=\(apiKey)"
                 
                 AF.request(requestSecondPageURLString).response { [self] playlistResponceData1 in
                     
                     do {
                         
                         indexForAppend = 0
-                        let secondPageResponceModel = try jsonDecoder.decode(PlaylistResponce.self, from: playlistResponceData1.data!)
+                        let secondPageResponceModel = try jsonDecoder.decode(PlaylistResponce.self,
+                                                                             from: playlistResponceData1.data!)
                         for _ in secondPageResponceModel.playlistItems! {
                             self.bottomPlaylistResponceDataArray.append(secondPageResponceModel.playlistItems![indexForAppend])
                             indexForAppend += 1
@@ -110,9 +117,34 @@ class NetworkService {
         }
     }
     
+    func fetchPlaylistForCarousel(playlistId: String, completion: @escaping(([PlaylistItems]) -> ())) {
+        
+        let requestFirstPageURLString = "\(urlStringFirstPart)playlistItems?part=snippet&maxResults=50&playlistId=\(playlistId)&key=\(apiKey)"
+        
+        AF.request(requestFirstPageURLString).response { [self] playlistResponceData in
+            
+            do {
+                
+                self.carouselPlaylistResponceDataArray.removeAll()
+                var indexForAppend = 0
+                let jsonDecoder = JSONDecoder()
+                let responceModel = try jsonDecoder.decode(PlaylistResponce.self,
+                                                           from: playlistResponceData.data!)
+                for _ in responceModel.playlistItems! {
+                    self.carouselPlaylistResponceDataArray.append(responceModel.playlistItems![indexForAppend])
+                    indexForAppend += 1
+                }
+                completion(carouselPlaylistResponceDataArray)
+                indexForAppend = 0
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
     func fetchViewsCountForTopGallery(videoID: String, completion: @escaping (([StatisticsItems]) -> ())) {
         
-        let requestURLString = "https://youtube.googleapis.com/youtube/v3/videos?part=statistics&id=\(videoID)&key=AIzaSyC4i7YntmeRWeUesx5NA8__0t4FgIwN5ko"
+        let requestURLString = "\(urlStringFirstPart)videos?part=statistics&id=\(videoID)&key=\(apiKey)"
         
         AF.request(requestURLString).response { [self] statisticsResponceData in
             
@@ -121,7 +153,8 @@ class NetworkService {
                 self.topStatisticsResponceDataArray.removeAll()
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
-                let responceModel = try jsonDecoder.decode(StatisticsResponce.self, from: statisticsResponceData.data!)
+                let responceModel = try jsonDecoder.decode(StatisticsResponce.self,
+                                                           from: statisticsResponceData.data!)
                 for _ in responceModel.statisticsItems! {
                     self.topStatisticsResponceDataArray.append(responceModel.statisticsItems![indexForAppend])
                     indexForAppend += 1
@@ -137,7 +170,7 @@ class NetworkService {
     
     func fetchViewsCountForBottomGallery(videoID: String, completion: @escaping (([StatisticsItems]) -> ())) {
         
-        let requestURLString = "https://youtube.googleapis.com/youtube/v3/videos?part=statistics&id=\(videoID)&key=AIzaSyC4i7YntmeRWeUesx5NA8__0t4FgIwN5ko"
+        let requestURLString = "\(urlStringFirstPart)videos?part=statistics&id=\(videoID)&key=\(apiKey)"
         
         AF.request(requestURLString).response { [self] statisticsResponceData in
             
@@ -146,7 +179,8 @@ class NetworkService {
                 self.topStatisticsResponceDataArray.removeAll()
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
-                let responceModel = try jsonDecoder.decode(StatisticsResponce.self, from: statisticsResponceData.data!)
+                let responceModel = try jsonDecoder.decode(StatisticsResponce.self,
+                                                           from: statisticsResponceData.data!)
                 for _ in responceModel.statisticsItems! {
                     self.bottomStatisticsResponceDataArray.append(responceModel.statisticsItems![indexForAppend])
                     indexForAppend += 1
@@ -160,9 +194,35 @@ class NetworkService {
         }
     }
     
+    func fetchViewsCountForCarousel(videoID: String, completion: @escaping (([StatisticsItems]) -> ())) {
+        
+        let requestURLString = "\(urlStringFirstPart)videos?part=statistics&id=\(videoID)&key=\(apiKey)"
+        
+        AF.request(requestURLString).response { [self] statisticsResponceData in
+            
+            do {
+                
+                self.carouselStatisticsResponceDataArray.removeAll()
+                var indexForAppend = 0
+                let jsonDecoder = JSONDecoder()
+                let responceModel = try jsonDecoder.decode(StatisticsResponce.self,
+                                                           from: statisticsResponceData.data!)
+                for _ in responceModel.statisticsItems! {
+                    self.carouselStatisticsResponceDataArray.append(responceModel.statisticsItems![indexForAppend])
+                    indexForAppend += 1
+                }
+                completion(carouselStatisticsResponceDataArray)
+                
+                indexForAppend = 0
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
     func fetchPlaylistNameForTopGallery(playlistID: String, completion: @escaping(([PlaylistSnippetItems]) -> ())) {
         
-        let requestURLString = "https://youtube.googleapis.com/youtube/v3/playlists?part=snippet&id=\(playlistID)&key=AIzaSyC4i7YntmeRWeUesx5NA8__0t4FgIwN5ko"
+        let requestURLString = "\(urlStringFirstPart)playlists?part=snippet&id=\(playlistID)&key=\(apiKey)"
         
         AF.request(requestURLString).response { [self] playlistSnippetResponceData in
             
@@ -170,7 +230,8 @@ class NetworkService {
                 self.topPlaylistSnippetResponceDataArray.removeAll()
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
-                let responceModel = try jsonDecoder.decode(PlaylistSnippetItemsResponce.self, from: playlistSnippetResponceData.data!)
+                let responceModel = try jsonDecoder.decode(PlaylistSnippetItemsResponce.self,
+                                                           from: playlistSnippetResponceData.data!)
                 for _ in responceModel.items! {
                     self.topPlaylistSnippetResponceDataArray.append(responceModel.items![indexForAppend])
                     indexForAppend += 1
@@ -186,7 +247,7 @@ class NetworkService {
     
     func fetchPlaylistNameForBottomGallery(playlistID: String, completion: @escaping(([PlaylistSnippetItems]) -> ())) {
         
-        let requestURLString = "https://youtube.googleapis.com/youtube/v3/playlists?part=snippet&id=\(playlistID)&key=AIzaSyC4i7YntmeRWeUesx5NA8__0t4FgIwN5ko"
+        let requestURLString = "\(urlStringFirstPart)playlists?part=snippet&id=\(playlistID)&key=\(apiKey)"
         
         AF.request(requestURLString).response { [self] playlistSnippetResponceData in
             
@@ -194,7 +255,8 @@ class NetworkService {
                 self.topPlaylistSnippetResponceDataArray.removeAll()
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
-                let responceModel = try jsonDecoder.decode(PlaylistSnippetItemsResponce.self, from: playlistSnippetResponceData.data!)
+                let responceModel = try jsonDecoder.decode(PlaylistSnippetItemsResponce.self,
+                                                           from: playlistSnippetResponceData.data!)
                 for _ in responceModel.items! {
                     self.bottomPlaylistSnippetResponceDataArray.append(responceModel.items![indexForAppend])
                     indexForAppend += 1

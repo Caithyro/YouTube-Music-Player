@@ -8,7 +8,7 @@
 import UIKit
 
 final class AutoSlideHelper {
-
+    
     class func pageIndex(for currentPageIndex: Int,
                          totalPageCount: Int,
                          direction: UIPageViewController.NavigationDirection) -> Int {
@@ -21,5 +21,5 @@ final class AutoSlideHelper {
             return currentPageIndex < totalPageCount - 1 ? currentPageIndex + 1 : 0
         }
     }
-
+    
 }
