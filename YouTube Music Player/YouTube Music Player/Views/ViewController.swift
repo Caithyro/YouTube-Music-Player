@@ -22,8 +22,8 @@ class ViewController: UIViewController {
     
     private var topPlaylistArray: [PlaylistItems] = []
     private var bottomPlaylistArray: [PlaylistItems] = []
-    private var topPlaylistId = "PLN1mxegxWPd3d8jItTyrAxwm-iq-KrM-e"
-    private var bottomPlaylistId = "OLAK5uy_m-wsk081gTHvqdTfPC7gKdKiTlqlxg9KM"
+    private var topPlaylistIdString = "PLN1mxegxWPd3d8jItTyrAxwm-iq-KrM-e"
+    private var bottomPlaylistIdString = "OLAK5uy_m-wsk081gTHvqdTfPC7gKdKiTlqlxg9KM"
     
     override func viewDidLoad() {
         
@@ -64,23 +64,23 @@ class ViewController: UIViewController {
         DispatchQueue.global(qos: .background).async {
             DispatchQueue.global(qos: .background).sync {
                 self.networkService.fetchPlaylistForTopGallery(playlistId:
-                                                                self.topPlaylistId) { items in
+                                                                self.topPlaylistIdString) { items in
                     self.topPlaylistArray = items
                     self.topPlaylistCollectionView.reloadData()
                 }
                 self.networkService.fetchPlaylistNameForTopGallery(playlistID:
-                                                                    self.topPlaylistId) { items in
+                                                                    self.topPlaylistIdString) { items in
                     self.topPlaylistNameLabel.text = items.first?.snippet?.title ?? "none"
                 }
             }
             DispatchQueue.global(qos: .background).sync {
                 self.networkService.fetchPlaylistForBottomGallery(playlistId:
-                                                                    self.bottomPlaylistId) { items in
+                                                                    self.bottomPlaylistIdString) { items in
                     self.bottomPlaylistArray = items
                     self.bottomPlaylistColletcionView.reloadData()
                 }
                 self.networkService.fetchPlaylistNameForBottomGallery(playlistID:
-                                                                        self.bottomPlaylistId) { items in
+                                                                        self.bottomPlaylistIdString) { items in
                     self.bottomPlaylistNameLabel.text = items.first?.snippet?.title ?? "none"
                 }
             }

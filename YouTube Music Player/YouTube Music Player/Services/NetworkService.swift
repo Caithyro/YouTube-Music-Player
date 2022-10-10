@@ -23,11 +23,11 @@ class NetworkService {
     private var bottomPlaylistSnippetResponceDataArray: [PlaylistSnippetItems] = []
     
     private let urlStringFirstPart = "https://youtube.googleapis.com/youtube/v3/"
-    private let apiKey = "AIzaSyC4i7YntmeRWeUesx5NA8__0t4FgIwN5ko"
+    private let apiKeyString = "AIzaSyC4i7YntmeRWeUesx5NA8__0t4FgIwN5ko"
     
     func fetchDataForCarousel(channelId: String, completion: @escaping(([StatisticsForChannelItems]) -> ())) {
         
-        let requestURLString = "\(urlStringFirstPart)channels?part=contentDetails&part=statistics&part=snippet&id=\(channelId)&key=\(apiKey)"
+        let requestURLString = "\(urlStringFirstPart)channels?part=contentDetails&part=statistics&part=snippet&id=\(channelId)&key=\(apiKeyString)"
         
         AF.request(requestURLString).response { [self] statisticsResponceData in
             
@@ -51,7 +51,7 @@ class NetworkService {
     
     func fetchPlaylistForTopGallery(playlistId: String, completion: @escaping(([PlaylistItems]) -> ())) {
         
-        let requestFirstPageURLString = "\(urlStringFirstPart)playlistItems?part=snippet&maxResults=10&playlistId=\(playlistId)&key=\(apiKey)"
+        let requestFirstPageURLString = "\(urlStringFirstPart)playlistItems?part=snippet&maxResults=10&playlistId=\(playlistId)&key=\(apiKeyString)"
         
         AF.request(requestFirstPageURLString).response { [self] playlistResponceData in
             
@@ -76,7 +76,7 @@ class NetworkService {
     
     func fetchPlaylistForBottomGallery(playlistId: String, completion: @escaping(([PlaylistItems]) -> ())) {
         
-        let requestFirstPageURLString = "\(urlStringFirstPart)playlistItems?part=snippet&playlistId=\(playlistId)&key=\(apiKey)"
+        let requestFirstPageURLString = "\(urlStringFirstPart)playlistItems?part=snippet&playlistId=\(playlistId)&key=\(apiKeyString)"
         
         AF.request(requestFirstPageURLString).response { [self] playlistResponceData in
             
@@ -92,7 +92,7 @@ class NetworkService {
                     indexForAppend += 1
                 }
                 
-                let requestSecondPageURLString = "\(urlStringFirstPart)playlistItems?part=snippet&pageToken=\(responceModel.nextPageToken!)&playlistId=\(playlistId)&key=\(apiKey)"
+                let requestSecondPageURLString = "\(urlStringFirstPart)playlistItems?part=snippet&pageToken=\(responceModel.nextPageToken!)&playlistId=\(playlistId)&key=\(apiKeyString)"
                 
                 AF.request(requestSecondPageURLString).response { [self] playlistResponceData1 in
                     
@@ -119,7 +119,7 @@ class NetworkService {
     
     func fetchPlaylistForCarousel(playlistId: String, completion: @escaping(([PlaylistItems]) -> ())) {
         
-        let requestFirstPageURLString = "\(urlStringFirstPart)playlistItems?part=snippet&maxResults=50&playlistId=\(playlistId)&key=\(apiKey)"
+        let requestFirstPageURLString = "\(urlStringFirstPart)playlistItems?part=snippet&maxResults=50&playlistId=\(playlistId)&key=\(apiKeyString)"
         
         AF.request(requestFirstPageURLString).response { [self] playlistResponceData in
             
@@ -144,7 +144,7 @@ class NetworkService {
     
     func fetchViewsCountForTopGallery(videoID: String, completion: @escaping (([StatisticsItems]) -> ())) {
         
-        let requestURLString = "\(urlStringFirstPart)videos?part=statistics&id=\(videoID)&key=\(apiKey)"
+        let requestURLString = "\(urlStringFirstPart)videos?part=statistics&id=\(videoID)&key=\(apiKeyString)"
         
         AF.request(requestURLString).response { [self] statisticsResponceData in
             
@@ -170,7 +170,7 @@ class NetworkService {
     
     func fetchViewsCountForBottomGallery(videoID: String, completion: @escaping (([StatisticsItems]) -> ())) {
         
-        let requestURLString = "\(urlStringFirstPart)videos?part=statistics&id=\(videoID)&key=\(apiKey)"
+        let requestURLString = "\(urlStringFirstPart)videos?part=statistics&id=\(videoID)&key=\(apiKeyString)"
         
         AF.request(requestURLString).response { [self] statisticsResponceData in
             
@@ -196,7 +196,7 @@ class NetworkService {
     
     func fetchViewsCountForCarousel(videoID: String, completion: @escaping (([StatisticsItems]) -> ())) {
         
-        let requestURLString = "\(urlStringFirstPart)videos?part=statistics&id=\(videoID)&key=\(apiKey)"
+        let requestURLString = "\(urlStringFirstPart)videos?part=statistics&id=\(videoID)&key=\(apiKeyString)"
         
         AF.request(requestURLString).response { [self] statisticsResponceData in
             
@@ -222,7 +222,7 @@ class NetworkService {
     
     func fetchPlaylistNameForTopGallery(playlistID: String, completion: @escaping(([PlaylistSnippetItems]) -> ())) {
         
-        let requestURLString = "\(urlStringFirstPart)playlists?part=snippet&id=\(playlistID)&key=\(apiKey)"
+        let requestURLString = "\(urlStringFirstPart)playlists?part=snippet&id=\(playlistID)&key=\(apiKeyString)"
         
         AF.request(requestURLString).response { [self] playlistSnippetResponceData in
             
@@ -247,7 +247,7 @@ class NetworkService {
     
     func fetchPlaylistNameForBottomGallery(playlistID: String, completion: @escaping(([PlaylistSnippetItems]) -> ())) {
         
-        let requestURLString = "\(urlStringFirstPart)playlists?part=snippet&id=\(playlistID)&key=\(apiKey)"
+        let requestURLString = "\(urlStringFirstPart)playlists?part=snippet&id=\(playlistID)&key=\(apiKeyString)"
         
         AF.request(requestURLString).response { [self] playlistSnippetResponceData in
             

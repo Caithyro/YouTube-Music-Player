@@ -34,12 +34,12 @@ class CarouselItem: UIView {
                      channelNameText: String? = "Unknown", subscribersCountText: String) {
         self.init()
         let transformer = SDImageResizingTransformer(size: CGSize(width: 390, height: 183), scaleMode: .fill)
-        channelNameLabel.text = channelNameText
-        subscribersCountLabel.text = "\(String(describing: subscribersCountText)) subscribers"
+        self.channelNameLabel.text = channelNameText
+        self.subscribersCountLabel.text = "\(String(describing: subscribersCountText)) subscribers"
         self.backgroundImageView.sd_setImage(with: URL(string: backgroundImageViewURLString ?? ""),
                                              placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.backgroundImageView.layer.cornerRadius = 10
-        setGradientBackground(view: self.playButtonView)
+        self.setGradientBackground(view: self.playButtonView)
     }
     
     //MARK: - Private
@@ -47,8 +47,8 @@ class CarouselItem: UIView {
     private func initWithNib() {
         Bundle.main.loadNibNamed(CarouselItem.CAROUSEL_ITEM_NIB,
                                  owner: self, options: nil)
-        contentView.frame = bounds
-        contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        self.contentView.frame = bounds
+        self.contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         addSubview(contentView)
     }
     

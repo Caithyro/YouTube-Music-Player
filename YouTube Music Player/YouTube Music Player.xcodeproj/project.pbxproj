@@ -263,6 +263,7 @@
 		66ADAECE28EC7ABA006C5403 /* YouTube Music Player */ = {
 			isa = PBXGroup;
 			children = (
+				66C7E39A28F443D800E264AD /* Views */,
 				66C2570C28EC98D1001CD59A /* TopCollectionViewCell */,
 				66179EA328F065F300217D55 /* BottomCollectionViewCell */,
 				6661CF8828F02FCD00BDD473 /* Models */,
@@ -271,9 +272,6 @@
 				66ADAECF28EC7ABA006C5403 /* AppDelegate.swift */,
 				66BC76A628EF35B800632201 /* AutoSlideHelper.swift */,
 				66ADAED128EC7ABA006C5403 /* SceneDelegate.swift */,
-				66ADAED328EC7ABA006C5403 /* ViewController.swift */,
-				662EEAB228F20F2000ACEC32 /* PlayerViewController.swift */,
-				66ADAEEA28EC8872006C5403 /* CarouselViewController.swift */,
 				66ADAED528EC7ABA006C5403 /* Main.storyboard */,
 				66ADAED828EC7ABC006C5403 /* Assets.xcassets */,
 				66ADAEDA28EC7ABC006C5403 /* LaunchScreen.storyboard */,
@@ -299,6 +297,16 @@
 				66C2570E28EC98EF001CD59A /* TopCollectionViewCell.xib */,
 			);
 			path = TopCollectionViewCell;
+			sourceTree = "<group>";
+		};
+		66C7E39A28F443D800E264AD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				66ADAED328EC7ABA006C5403 /* ViewController.swift */,
+				662EEAB228F20F2000ACEC32 /* PlayerViewController.swift */,
+				66ADAEEA28EC8872006C5403 /* CarouselViewController.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		727BF0D5D26EDEA4F064A7D0 /* Pods */ = {

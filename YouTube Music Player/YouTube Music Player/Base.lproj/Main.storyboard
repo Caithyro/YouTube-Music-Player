@@ -349,13 +349,12 @@
                         <outlet property="durationLabel" destination="cNf-uK-lxd" id="Zq8-7g-jxV"/>
                         <outlet property="nameLabel" destination="fg5-FK-usz" id="CPO-6U-f8c"/>
                         <outlet property="nextButton" destination="hdS-kM-c9x" id="NBn-mS-CzL"/>
-                        <outlet property="oopenCloseButton" destination="VWU-2M-z6S" id="aNz-Qe-ZAI"/>
+                        <outlet property="openCloseButton" destination="VWU-2M-z6S" id="aNz-Qe-ZAI"/>
                         <outlet property="playButton" destination="3WM-Tg-Vnk" id="ZgZ-JP-7lk"/>
                         <outlet property="playerView" destination="hPo-Vr-a8R" id="mLO-Yj-htR"/>
                         <outlet property="previousButton" destination="0Em-hV-JOS" id="VAe-pU-0bg"/>
                         <outlet property="timelineSlider" destination="3sY-Km-lpk" id="ljo-ik-WIe"/>
                         <outlet property="viewsCountLabel" destination="SGz-eA-Kwq" id="Ozk-B2-L3d"/>
-                        <outlet property="volumeView" destination="et4-qW-U1c" id="BR0-Zi-iTL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LwU-lu-rgH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

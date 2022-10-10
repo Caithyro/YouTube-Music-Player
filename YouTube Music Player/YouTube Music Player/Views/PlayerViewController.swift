@@ -11,7 +11,7 @@ import youtube_ios_player_helper
 
 class PlayerViewController: UIViewController {
     
-    @IBOutlet weak var oopenCloseButton: UIButton!
+    @IBOutlet weak var openCloseButton: UIButton!
     @IBOutlet weak var playerView: YTPlayerView!
     @IBOutlet weak var timelineSlider: UISlider!
     @IBOutlet weak var currentTimeLabel: UILabel!
@@ -21,7 +21,6 @@ class PlayerViewController: UIViewController {
     @IBOutlet weak var previousButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
-    @IBOutlet weak var volumeView: MPVolumeView!
     
     var videoIdToLoad: String = ""
     var indexPathRow: Int = 0
@@ -76,6 +75,10 @@ class PlayerViewController: UIViewController {
                 serialQueue.sync {
                     self.playerView.load(withVideoId: self.topPlaylistArray[playlistIndex].snippet?.resourceId?.videoId ?? "0",
                                          playerVars: ["controls" : 0])
+                    self.networkService.fetchViewsCountForTopGallery(videoID: self.topPlaylistArray[playlistIndex].snippet?.resourceId?.videoId ?? "0")
+                    { statistics in
+                        self.viewsCountLabel.text = "\(statistics.first?.statistics?.viewCount ?? "Unknown ammount of") views"
+                    }
                 }
                 self.nameLabel.text = self.topPlaylistArray[playlistIndex].snippet?.title
             } else {
@@ -83,6 +86,10 @@ class PlayerViewController: UIViewController {
                 serialQueue.sync {
                     self.playerView.load(withVideoId: self.bottomPlaylistArray[playlistIndex].snippet?.resourceId?.videoId ?? "0",
                                          playerVars: ["controls" : 0])
+                    self.networkService.fetchViewsCountForTopGallery(videoID: self.bottomPlaylistArray[playlistIndex].snippet?.resourceId?.videoId ?? "0")
+                    { statistics in
+                        self.viewsCountLabel.text = "\(statistics.first?.statistics?.viewCount ?? "Unknown ammount of") views"
+                    }
                 }
                 self.nameLabel.text = self.bottomPlaylistArray[playlistIndex].snippet?.title
             }
@@ -101,7 +108,7 @@ class PlayerViewController: UIViewController {
             self.playerView.previousVideo()
             getDurarion()
         default:
-            print("error")
+            break
         }
         
         
@@ -131,6 +138,10 @@ class PlayerViewController: UIViewController {
                 serialQueue.sync {
                     self.playerView.load(withVideoId: self.topPlaylistArray[playlistIndex].snippet?.resourceId?.videoId ?? "0",
                                          playerVars: ["controls" : 0])
+                    self.networkService.fetchViewsCountForTopGallery(videoID: self.topPlaylistArray[playlistIndex].snippet?.resourceId?.videoId ?? "0")
+                    { statistics in
+                        self.viewsCountLabel.text = "\(statistics.first?.statistics?.viewCount ?? "Unknown ammount of") views"
+                    }
                 }
                 self.nameLabel.text = self.topPlaylistArray[playlistIndex].snippet?.title
             } else {
@@ -138,6 +149,10 @@ class PlayerViewController: UIViewController {
                 serialQueue.sync {
                     self.playerView.load(withVideoId: self.bottomPlaylistArray[playlistIndex].snippet?.resourceId?.videoId ?? "0",
                                          playerVars: ["controls" : 0])
+                    self.networkService.fetchViewsCountForTopGallery(videoID: self.bottomPlaylistArray[playlistIndex].snippet?.resourceId?.videoId ?? "0")
+                    { statistics in
+                        self.viewsCountLabel.text = "\(statistics.first?.statistics?.viewCount ?? "Unknown ammount of") views"
+                    }
                 }
                 self.nameLabel.text = self.bottomPlaylistArray[playlistIndex].snippet?.title
             }
@@ -145,7 +160,8 @@ class PlayerViewController: UIViewController {
             changePlaylistIndexPositive(playlistArray: carouselPlaylistArray)
             self.nameLabel.text = carouselPlaylistArray[playlistIndex].snippet?.title
             DispatchQueue.global().sync {
-                self.networkService.fetchViewsCountForCarousel(videoID: carouselPlaylistArray[self.playlistIndex].snippet?.resourceId?.videoId ?? "") { statisticsItems in
+                self.networkService.fetchViewsCountForCarousel(videoID: carouselPlaylistArray[self.playlistIndex].snippet?.resourceId?.videoId ?? "")
+                { statisticsItems in
                     self.viewsCountLabel.text = "\(statisticsItems.first?.statistics?.viewCount ?? "") views"
                 }
             }
@@ -156,7 +172,7 @@ class PlayerViewController: UIViewController {
             self.playerView.nextVideo()
             getDurarion()
         default:
-            print("error")
+            break
         }
         
     }
@@ -254,7 +270,7 @@ class PlayerViewController: UIViewController {
                 self.playerView.load(withPlaylistId: playlistId, playerVars: ["controls" : 0])
             }
         default:
-            print("Unexpected error")
+            break
         }
     }
     

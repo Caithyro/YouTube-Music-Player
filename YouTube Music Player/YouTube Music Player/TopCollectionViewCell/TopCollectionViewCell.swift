@@ -18,10 +18,6 @@ class TopCollectionViewCell: UICollectionViewCell {
     private let transformer = SDImageResizingTransformer(size: CGSize(width: 155,
                                                                       height: 87.33), scaleMode: .fill)
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
     func configureTopGalleryCell(index: Int, videoId: String, dataToDisplay: PlaylistItems) {
         
         networkService.fetchViewsCountForTopGallery(videoID: videoId) { statisticItems in
