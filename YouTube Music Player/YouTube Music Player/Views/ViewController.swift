@@ -43,6 +43,7 @@ class ViewController: UIViewController {
                                                                         "PlayerViewController")
             as? PlayerViewController {
             playerViewController.topPlaylistArray = self.topPlaylistArray
+            playerViewController.videoIdToLoad = self.topPlaylistArray[0].snippet?.resourceId?.videoId ?? ""
             navigationController?.present(playerViewController, animated: true)
         }
     }
